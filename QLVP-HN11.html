@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CÔNG TY DTSOFT - VĂN PHÒNG HÀ NỘI 11</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #007bff;
+            --secondary-color: #1a2b42;
+            --accent-color: #2ecc71;
+            --text-color: #ffffff;
+            --light-text-color: #adb5bd;
+            --bg-light: #f8f9fa;
+            --bg-dark: #f0f2f5;
+            --menu-hover: #3c4250;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-dark);
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 100%;
+            max-width: 300px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1000;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #3c4250;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 1.5em;
+            color: #fff;
+        }
+        .sidebar-header p {
+            font-size: 0.8em;
+            color: var(--light-text-color);
+            margin-top: 5px;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 50px;
+            margin-bottom: 15px;
+        }
+        .logo {
+            width: 50px;
+            height: 50px;
+            fill: #ffffff;
+        }
+        
+        /* Sidebar toggle button for mobile */
+        .sidebar-toggle {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            z-index: 1001;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Menu */
+        .sidebar-menu {
+            width: 100%;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .sidebar-menu ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .sidebar-menu li {
+            margin-bottom: 8px;
+        }
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            color: var(--light-text-color);
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.9em;
+        }
+        .sidebar-menu a:hover {
+            background-color: var(--menu-hover);
+            color: var(--text-color);
+            transform: translateX(5px);
+        }
+        .sidebar-menu li.parent-menu > a {
+            font-weight: 500;
+            background-color: var(--primary-color);
+            color: #fff;
+            margin-top: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 12px 20px;
+        }
+        .sidebar-menu a .icon {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+        .sidebar-menu li.parent-menu.active > a {
+            background-color: var(--accent-color);
+            color: #fff;
+            box-shadow: 0 4px 8px rgba(39, 174, 96, 0.4);
+        }
+        .sidebar-menu ul.sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            padding-left: 20px;
+            border-left: 2px solid var(--primary-color);
+            margin-top: 5px;
+        }
+        .sidebar-menu ul.sub-menu.active {
+            max-height: 500px;
+        }
+        .sidebar-menu ul.sub-menu li a.active {
+            background-color: #FFD700;
+            color: #343a40;
+            font-weight: 500;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: var(--bg-light);
+            margin-left: 0;
+            transition: margin-left 0.3s ease-in-out;
+            padding-top: 70px;
+        }
+
+        .content-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: #fff;
+            color: #343a40;
+            padding: 1.5rem 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .content-header h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #343a40;
+        }
+        .content-header p {
+            margin: 5px 0 0;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+        .open-in-new-tab-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 0.8em;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            display: inline-flex;
+            align-items: center;
+            text-align: center;
+        }
+        .open-in-new-tab-btn:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+        }
+        .open-in-new-tab-btn svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            fill: white;
+            vertical-align: middle;
+        }
+        
+        /* New CSS to style the contract button */
+        .contract-btn {
+            background-color: #3b5998;
+        }
+        .contract-btn:hover {
+            background-color: #2d4373;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(59, 89, 152, 0.3);
+        }
+        
+        /* New CSS to style the Form Catalog button */
+        .form-catalog-btn {
+            background-color: var(--primary-color);
+        }
+        .form-catalog-btn:hover {
+            background-color: #0056b3; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+        }
+
+
+        /* New CSS to center button */
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+            margin-top: 15px;
+        }
+        /* Mobile-specific button styling */
+        .button-container a {
+            width: 100%;
+            justify-content: center;
+        }
+
+
+        .content-frame {
+            width: 100%;
+            height: 60vh;
+            border: none;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            border-radius: 12px;
+        }
+
+        /* New styles for welcome content */
+        .welcome-card {
+            background: linear-gradient(135deg, #1f2e4d, #2a3a5a);
+            color: #ffffff;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 1s forwards;
+            overflow: hidden;
+        }
+        .scrolling-container {
+            white-space: nowrap;
+            box-sizing: border-box;
+            display: inline-block;
+            animation: marquee 15s linear infinite;
+            width: 100%;
+        }
+
+        .welcome-card h2 {
+            font-size: 1.5em;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .welcome-card p {
+            font-size: 1em;
+            margin: 0;
+            color: #FFD700;
+            display: inline-block;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes marquee {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        /* Modal for login */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1002;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        /* New CSS for the three-column layout */
+        .waiting-screen {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .column {
+            flex: 1;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: var(--bg-dark);
+        }
+
+        .column h3 {
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .column ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .column li {
+            background-color: #f0f2f5;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            font-size: 0.85em;
+            line-height: 1.4;
+        }
+
+        .column p {
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .column-header {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        /* New collapsible styles */
+        .collapsible-header {
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            color: var(--secondary-color);
+        }
+        .collapsible-header:hover {
+            background-color: #d1d5db;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s ease;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding-top 0.3s ease-out;
+            padding-top: 0;
+        }
+        .collapsible-content.active {
+            max-height: var(--content-height);
+            padding-top: 15px;
+        }
+
+        /* Tablet and Desktop Styles */
+        @media (min-width: 768px) {
+            body {
+                flex-direction: row;
+            }
+
+            .sidebar {
+                position: static;
+                transform: translateX(0);
+                width: 300px;
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+            .sidebar-toggle {
+                display: none;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 25px;
+                padding-top: 25px;
+            }
+            .content-header h1 {
+                font-size: 1.8em;
+            }
+            .content-frame {
+                height: calc(100% - 140px);
+            }
+            .welcome-card h2 {
+                font-size: 1.8em;
+            }
+            .welcome-card p {
+                font-size: 1.1em;
+            }
+            .waiting-screen {
+                flex-direction: row;
+                gap: 20px;
+                padding: 25px;
+            }
+            .button-container {
+                flex-direction: row;
+                gap: 20px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="40" fill="#4a69bd" />
+                    <path d="M 30 45 L 50 65 L 70 45" stroke="#ffffff" stroke-width="8" fill="none" />
+                    <text x="50" y="55" font-family="Poppins" font-size="25" fill="#ffffff" text-anchor="middle" dominant-baseline="central">D</text>
+                </svg>
+            </div>
+            <h2>DTSOFT</h2>
+            <p>VĂN PHÒNG HÀ NỘI 11</p>
+        </div>
+        
+
+        <div class="sidebar-menu">
+            <ul>
+                <li class="parent-menu">
+                    <a href="#" >
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12" y2="18"></line></svg>
+                        <span class="menu-text">Khách hàng</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="https://docs.google.com/spreadsheets/d/14gd4hRBuadIBycsMMP8j3_SvBmlNzM7sQYxr_BTFV8U/edit?gid=112090607#gid=112090607" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            Khách hàng chung</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1kFLclOZWL5EKNcTFvx83zS_pZCTl76WjeFf3tPs5xyI/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            Khách hàng Tuyên Quang</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1SgSrwWX7-XTZVRN8U1HhLYjxZJpbGJDaTed9jOeEcBQ/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            Khách hàng Thái Nguyên</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1i9c8zHioDpivRyihbjVwDNirD-qIbSPLtzeQkv4YgkI/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            Khách hàng Phú Thọ</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1K8tdzpQ8biKiPXq4aWRJ7jmTgx-wLZtvqicyxERBmBU/edit" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            Khách hàng Cao Bằng</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/15_G1R2YT3CZ4FZPLQJoJ_UF_uMHRJ4qotpN-XKiDCz0/edit?usp=sharing" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            Địa bàn mới</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="parent-menu">
+                    <a href="#" >
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M17 11.5a4.5 4.5 0 0 1-4.5 4.5h-2a2 2 0 0 1-2-2V8.3L7.5 7v7.5"></path><path d="M14.5 9.5l-4.2-4.2a2 2 0 0 1-1.4-1.4V2h-2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9.5"></path><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                        <span class="menu-text">Công nợ</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="https://docs.google.com/spreadsheets/d/1878x56qzlwu7nogh7Kj5UKNsj1I1KrrtGxPsdPmIbN0/edit?gid=558647515#gid=558647515" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            Khách hàng, Kinh doanh-VP</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1hX7Wv4lEgiHOGBDznXTXQBHa6U4sFyWaeLLkBkCfTmo/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            Khách hàng chưa thanh toán</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1RZsqPd-BLlsy22EhplV-QGeSLHWiMk_gcHZ-zusDW_U/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            Khách hàng thu hợp đồng</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1vcZKhgJROJr-oClPkdZd38QHlo2lEbzg9cuTlzMY5WI/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            Khách hàng kinh doanh</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1zfwmaLOqiYJcNvD-7r29GI8Rn_gyPjpphxBSTysBFaM/edit?gid=915248246#gid=915248246" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            Khách hàng khác</a>
+                        </li>
+                    </ul>
+                </li>
+                 
+                <li class="parent-menu">
+                    <a href="#" >
+                        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <span class="menu-text">Nhật ký khách hàng – SP</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="https://drive.google.com/drive/folders/1JWBfrZJnFRQLyIphktpVxgsBu0lq0hQK" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            PMVS2025(bit.ly/nva24)</a>
+                        </li>
+                        <li><a href="https://drive.google.com/drive/folders/1Or0fleLSZX4Z_qUrqwsjb7rCbfx4JD9S" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            PMVS2024(bit.ly/nva107)</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/12bkDpz0En_8YSlj8hx3_zTedhR7-ueqo0bIy42nVGa8/edit?gid=1754585549#gid=1754585549" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – KTHC</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1wdppaMexs8TSY5R5rSZRqscz_lZlezOW/edit?gid=835882959#gid=835882959" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – QLTC</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1iNFsfk_g0zv0Htg0SuRJWwXVDztSX26WPlyik_ncADc/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – QLTS</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1DaKrv6_z_RPF88NmzQH6J66DYo_bkJAnYuX5i8GoMoA/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0-7-7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – QLNNTT</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1jAN7ZThUodTcZ17GHzyuIlodBI3bCMvw-MexTsG6UtM/edit#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM - QLCC</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1BWB4LsXMMBnH431tbrhOBysmpDIRxpDT8co9JdHI8zA/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – HTHS</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1_EEoOYTZvupgvfeQMsBJ22WX2st3i7NdKIVPsjHfyAI/edit?gid=14202651#gid=14202651" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – HTCV</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1BanIou9XtB05pjBe0r6Ee8f966MSCzGG/edit?gid=534174632#gid=534174632" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – HTLD</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/15cct1q-dd5mmLGjftk9L2BYCqW-KCVIN-NHpm3g2_zw/edit?gid=1754585549#gid=1754585549" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM - BTXH</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1YGcMPiHFMEIJs5yOUFRpEavCMpnvHaUuZcm2iflvfdY/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – QL Khác</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1tjTxNQjwHNWBrUt6As4kWbJy9lCJQR4Qxu-ikwu0A4w/edit?gid=1754585549#gid=1754585549" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path><path d="M10 13a5 5 0 0 0-7.54-.54.5.5 0 0 0-.54.54V10.5a7 7 0 0 0 7 7"></path></svg>
+                            NKPM – QLXP</a>
+                        </li>
+                    </ul>
+                </li>
+                 
+                <li class="parent-menu">
+                    <a href="#" >
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 21.2l-6.8-6.8a5 5 0 0 1 0-7.2l1.4-1.4a5 5 0 0 1 7.2 0l1.4 1.4a5 5 0 0 1 0 7.2L12 21.2z"></path></svg>
+                        <span class="menu-text">Cán bộ văn phòng</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="https://docs.google.com/spreadsheets/d/1FGUNpLh2IGIjabg542-a6uMzHEL5KvopsurzzG_NzAs/edit?gid=912705557#gid=912705557" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Nguyễn Văn Ánh</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1F4eaZAblHe39ewANHBkp5hIFZeE1VDVL9mnV1D6LguM/edit?gid=912705557#gid=912705557" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Nguyễn Văn Hiển</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1J9wSztz6WmajEONksZu8ZmfVoCi1u9lGCrqrAadir1k/edit?gid=912705557#gid=912705557" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Nguyễn Văn Quỳnh</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1K7LwuaCOAbvKutYpz-ixS74zssRQ903J7PLnrzrT36E/edit?gid=912705557#gid=912705557" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Trần Ngọc Biên</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1i__Mh1IXmtjmGd3kWY1ZpDPpAGLq9bpZybmOxEYF8Fo/edit?gid=1412974847#gid=1412974847" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            Nguyễn Đoàn Quang Lực</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1TVpkHB2jcFmWuaBQF__IWhhd5z8UgmSdEn8X4YriyzY/edit?gid=977604305#gid=977604305" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            Lịch tổng hợp</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/14O5W6KqWoiKsbhoyoH_qmKm0tttO5xhHuy6flExpyI0/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                            Quỹ văn phòng</a>
+                        </li>
+                        <li><a href="https://bieumau.dtsoft.vn" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                            Yêu cầu chỉnh sửa phần mềm</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="parent-menu">
+                    <a href="#" >
+                        <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1" ry="1"></rect><rect x="14" y="3" width="7" height="7" rx="1" ry="1"></rect><rect x="14" y="14" width="7" height="7" rx="1" ry="1"></rect><rect x="3" y="14" width="7" height="7" rx="1" ry="1"></rect></svg>
+                        <span class="menu-text">Quản lý khác</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="https://docs.google.com/spreadsheets/d/17vsiUFwsdOC_jLO3b8AD7Fn7I6GioisrfVPfuss94dU/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 21.2l-6.8-6.8a5 5 0 0 1 0-7.2l1.4-1.4a5 5 0 0 1 7.2 0l1.4 1.4a5 5 0 0 1 0 7.2L12 21.2z"></path></svg>
+                            Tài khoản Demo</a>
+                        </li>
+                        <li><a href="https://drive.google.com/drive/folders/1fciE-S0vGpq712ha6OtGBjSIE5T9j4jv" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                            Key_DTSoft</a>
+                        </li>
+                        <li><a href="https://docs.google.com/document/d/1Rv0-2ixDs1IjLV3UN9v5ajLAl7DAOuuZ/edit" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                            HD đồng bộ HTHS</a>
+                        </li>
+                        <li><a href="#">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                            HD phần mềm(KTHConline)</a>
+                        </li>
+                        <li><a href="#">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                            HD phần mềm(KTHCofline)</a>
+                        </li>
+                        <li><a href="https://docs.google.com/document/d/1cMOjVzkOva2K2Kc9YDf7ouJqbPgAJTLe/edit" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                            HD phần mềm(QLTC)</a>
+                        </li>
+                        <li><a href="https://drive.google.com/drive/folders/105axeSENOixMAqPrrqNYljoZ_wzu2P3D" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                            HD phần mềm(HTCV)</a>
+                        </li>
+                        <li><a href="https://drive.google.com/drive/folders/1BCRUHEEKCL0NG1EWYGmdghRNfIcx4d87" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line></svg>
+                            HD phần mềm(HTLD)</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1kuZvlclBettqeU2ngOt0LziKIAIO6AzsFAhxTsI2kqg/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 21.2l-6.8-6.8a5 5 0 0 1 0-7.2l1.4-1.4a5 5 0 0 1 7.2 0l1.4 1.4a5 5 0 0 1 0 7.2L12 21.2z"></path></svg>
+                            Đào tạo HN11</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1zylH5FJgEubYXVVUJcJe7_MYXCELnhiGTs3N6qqzMk/edit?gid=588563060#gid=588563060" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M12 21.2l-6.8-6.8a5 5 0 0 1 0-7.2l1.4-1.4a5 5 0 0 1 7.2 0l1.4 1.4a5 5 0 0 1 0 7.2L12 21.2z"></path></svg>
+                            Đào tạo nhân sự</a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <li class="parent-menu">
+                    <a href="#" >
+                        <svg class="icon" viewBox="0 0 24 24"><path d="M12 21.2l-6.8-6.8a5 5 0 0 1 0-7.2l1.4-1.4a5 5 0 0 1 7.2 0l1.4 1.4a5 5 0 0 1 0 7.2L12 21.2z"></path></svg>
+                        <span class="menu-text">Tài khoản kết nối</span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="https://docs.google.com/spreadsheets/d/1koXwJqQgVNP6BCBJ6MQEiIS1DOkEXJW1Ks-0LgpnWtM/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            DSKN ngân hàng</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1jwpk7gDCEj8gy2vmLbf6XpB9KfkeKp2excgXb6Ol8b4/edit?resourcekey=&gid=2092213072#gid=2092213072" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            DSKN 935KB Thái Nguyên</a>
+                        </li>
+                        <li><a href="https://docs.google.com/forms/d/1Lszzlwf_mSMaVVVh8SBb0ptbxpT1Bw7D1Tddhj283B4/viewform?edit_requested=true#responses" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8a4 4 0 0 1 3.37 3.37z"></path><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
+                            FormĐK 935KB Thái Nguyên</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1jwpk7gDCEj8gy2vmLbf6XpB9KfkeKp2excgXb6Ol8b4/edit?resourcekey=&gid=2092213072#gid=2092213072" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            DSKN 935KB Tuyên Quang</a>
+                        </li>
+                        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc7w64f4frbOy9_TzLtA9bCc9raknwgmGQwoD8ta7mU_yfkTg/viewform" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8a4 4 0 0 1 3.37 3.37z"></path><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
+                            FormĐK 935KB Tuyên Quang</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/11Nk4bgrtxn8tvk7DZ5ArH_4BDhCnGSHG4AgFwvmAzgU/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            DS nâng cấp</a>
+                        </li>
+                        <li><a href="https://docs.google.com/spreadsheets/d/1BAiz9K9YcJOp8hn08oKj-UwY8g0yYDTCMYxHvYvaBnA/edit?gid=0#gid=0" target="contentFrame">
+                            <svg class="icon" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                            DS Dịch vụ kết nối</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="welcome-card">
+            <div class="scrolling-container">
+                <p>NGUYỄN VĂN ÁNH 0969.338.332 CHÀO MỪNG BẠN ĐẾN VỚI VĂN PHÒNG HÀ NỘI 11</p>
+            </div>
+        </div>
+        <div class="waiting-screen" id="waitingScreen">
+            <div class="column">
+                <div class="collapsible-header">
+                    <h3>THÔNG TIN GỬI KHÁCH HÀNG</h3>
+                </div>
+                <div class="collapsible-content">
+                    <p>
+                        Kính gửi Quý khách hàng, <br>
+                        Chúng tôi trân trọng cung cấp thông tin liên hệ bộ phận Hỗ Trợ Kỹ thuật phần mềm DTSOFT, sẵn sàng giải đáp mọi thắc mắc và hỗ trợ Quý khách trong quá trình sử dụng sản phẩm:
+                    </p>
+                    <p>
+                        **Thời gian làm việc:**<br>
+                        **Thứ Hai - Thứ Sáu:** 7:40 - 11:30 | 13:30 - 16:30<br>
+                        **Thứ Bảy:** 7:40 - 11:30 | 13:30 - 15:30<br>
+                        **Chủ Nhật:** Nghỉ
+                    </p>
+                    <p>
+                        **Hỗ trợ ngoài giờ hành chính/ngày nghỉ:** Để đảm bảo chất lượng hỗ trợ tốt nhất, Quý khách vui lòng liên hệ trước để chúng tôi có thể sắp xếp nhân sự phù hợp.
+                    </p>
+                    <p>
+                        **Thông tin liên hệ trực tiếp:**
+                    </p>
+                    <ul>
+                        <li>1) Nguyễn Văn Ánh - 0969.338.332 - Số cá nhân.</li>
+                        <li>2) Nguyễn Văn Hiển - 0984.492.510 - Số cá nhân.</li>
+                        <li>3) Nguyễn Văn Quỳnh - 0983.614.985 - Số cá nhân</li>
+                        <li>4) Trần Ngọc Biên - 0984.530.556 - Số cá nhân</li>
+                        <li>5) Nguyễn Đoàn Quang Lực - 0963.203.479 - Số cá nhân</li>
+                        <li>6) Số máy bàn - 0243.689.2864 - Số văn phòng</li>
+                        <li>7) Số máy bàn - 0243.689.3113 - Số văn phòng</li>
+                        <li>8) Số máy bàn - 0964.961.221 - Số văn phòng</li>
+                    </ul>
+                    <p>
+                        Rất mong nhận được sự hợp tác và tin tưởng từ Quý khách. <br>
+                        Xin chân thành cảm ơn!
+                    </p>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="collapsible-header">
+                    <h3>THÔNG TIN GỬI KÈM HÓA ĐƠN CHO KHÁCH</h3>
+                </div>
+                <div class="collapsible-content">
+                    <p>
+                        Kính gửi Quý anh/chị, Em xin gửi kèm theo đây hóa đơn và hợp đồng từ Công ty TNHH Phát triển và Chuyển giao Phần mềm DTSoft, với thông tin chi tiết như sau:
+                    </p>
+                    <ul>
+                        <li>
+                            [1] Đơn vị thụ hưởng: Công ty TNHH Phát triển và Chuyển giao Phần mềm
+                        </li>
+                        <li>
+                            [2] Số tài khoản: 1500311005208 tại Ngân hàng Agribank Chi nhánh Hà Nội
+                        </li>
+                        <li>
+                            [3] Mã số ngân hàng (Swift code): 01204003 (Agribank Chi nhánh Hà Nội)
+                        </li>
+                        <li>
+                            [4] Địa chỉ trụ sở: Số 49 ngõ 203 Kim Ngưu, P. Vĩnh Tuy, Hà Nội
+                        </li>
+                    </ul>
+                    <p>
+                        Trân trọng.
+                    </p>
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="collapsible-header">
+                    <h3>THÔNG TIN NGHỊ HÓA ĐƠN</h3>
+                </div>
+                <div class="collapsible-content">
+                    <p>
+                        Thông tin người nhận: Nguyễn Văn Ánh<br>
+                        Số ĐT: 0969.338.332<br>
+                        Địa chỉ cũ: Xóm Mới, Thôn 4, xã Vạn Phúc, huyện Thanh Trì, Hà Nội (Sau viện Quy hoạch rừng)<br>
+                        Địa chỉ mới: Xóm Mới, Thôn 4, xã Thanh Trì, Hà Nội (Sau viện Quy hoạch rừng)<br>
+                       ------------------------------------------------------------------<br>
+                        Họ Tên người mua hàng: Nguyễn Văn Ánh<br>
+                        Đơn vị: Công ty TNHH Phát triển và Chuyển giao phần mềm<br>
+                        Mã số thuế: 0101148771<br>
+                        Địa chỉ: Số 49, Ngõ 203, Kim Ngưu, phường Vĩnh Tuy, thành phố Hà Nội<br>
+                        Phòng nghỉ: 1phòng x 6tối x 250k = 1.500.000₫<br>
+                        (Một triệu năm trăm nghìn đồng)<br>
+                        Phòng nghỉ các tối từ 10 đến 15 tháng 09/2025
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content-header">
+            <h1 id="contentTitle">QUẢN LÝ VĂN PHÒNG HN11</h1>
+            <div class="button-container">
+                <a id="openInNewTabBtn" class="open-in-new-tab-btn" href="#" target="_blank"></a>
+                <a id="contractBtn" class="open-in-new-tab-btn contract-btn" href="#" target="_blank" style="display: none;">
+                    <svg class="icon" viewBox="0 0 24 24" style="fill: none; stroke: currentColor;">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line>
+                    </svg>
+                    Hợp đồng thu
+                </a>
+                <a id="formCatalogBtn" class="open-in-new-tab-btn form-catalog-btn" href="https://bieumau.dtsoft.vn" target="contentFrame" style="display: none;">
+                    <svg class="icon" viewBox="0 0 24 24" style="fill: none; stroke: currentColor;">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><line x1="10" y1="9" x2="8" y2="9"></line>
+                    </svg>
+                    DANH MỤC BIỂU MẪU
+                </a>
+                </div>
+        </div>
+        <iframe name="contentFrame" id="contentFrame" class="content-frame" src="about:blank"></iframe>
+    </div>
+
+    <div class="auth-modal" id="auth-modal">
+        <div class="modal-content">
+            <h2>Đăng nhập Google</h2>
+            <p>Để truy cập các tệp, bạn cần đăng nhập vào tài khoản Gmail.</p>
+            <p><strong>Lưu ý:</strong> Chức năng này chỉ hoạt động khi tệp được tải lên một máy chủ web.</p>
+            <a href="#" onclick="hideAuthModal()" class="modal-skip-link">Bỏ qua</a>
+        </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarMenu = document.querySelector('.sidebar-menu');
+            const openBtn = document.getElementById('openInNewTabBtn');
+            const contractBtn = document.getElementById('contractBtn');
+            const formCatalogBtn = document.getElementById('formCatalogBtn'); // Khai báo nút mới
+            const contentFrame = document.getElementById('contentFrame');
+            const contentTitle = document.getElementById('contentTitle');
+            const waitingScreen = document.getElementById('waitingScreen');
+
+            // Toggle sidebar visibility on mobile
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('active');
+            });
+
+            // HTML content for the Google Sheets and Drive buttons
+            const sheetsButtonHtml = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path d="M24 6c-9.94 0-18 8.06-18 18s8.06 18 18 18 18-8.06 18-18-8.06-18-18-18z" fill="#4CAF50"/>
+                    <path d="M37 17.15l-1.92-3.32c-.5-.87-1.5-.87-2 0l-1.63 2.82c-.87-.4-1.85-.62-2.88-.62H24v-4c0-.55-.45-1-1-1h-2c-.55 0-1 .45-1 1v4h-2c-1.66 0-3.32.22-4.9.62L8.91 14.1c-.5-.87-1.5-.87-2 0l-1.92 3.32c-.5.87-.2 1.9.7 2.4l4.13 2.38c-.28.87-.45 1.77-.45 2.7c0 1.9.46 3.68 1.25 5.25L5 33.35c-.9.5-.9 1.53 0 2.4l1.92 3.32c.5.87 1.5.87 2 0l4.13-7.15c.9.2 1.8.35 2.7.45v3.6c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-3.6c1.66 0 3.32-.22 4.9-.62l4.13 7.15c.5.87 1.5.87 2 0l1.92-3.32c.9-.5.9-1.53 0-2.4l-4.13-2.38c.28-.87.45-1.77.45-2.7 0-1.9-.46-3.68-1.25-5.25L37 19.55c.9-.5.9-1.53 0-2.4z" fill="#E8EAF6"/>
+                    <path d="M24 17.5c-3.59 0-6.5 2.91-6.5 6.5s2.91 6.5 6.5 6.5 6.5-2.91 6.5-6.5-2.91-6.5-6.5-6.5z" fill="#4285F4"/>
+                    <path d="M24 19c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5z" fill="#E8EAF6"/>
+                </svg>
+                Mở trong Google Sheets
+            `;
+            
+            const driveButtonHtml = `
+                <svg class="icon" viewBox="0 0 24 24" style="fill: none; stroke: currentColor;">
+                    <path d="M20 6H12L10 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6Z"></path>
+                </svg>
+                Mở trong Google Driver
+            `;
+
+            openBtn.style.display = 'none';
+            contractBtn.style.display = 'none';
+            formCatalogBtn.style.display = 'none'; // Ẩn nút mới khi khởi tạo
+
+            sidebarMenu.addEventListener('click', (event) => {
+                const target = event.target.closest('a');
+                if (!target) return;
+
+                const parentMenu = target.closest('.parent-menu');
+                const subMenu = parentMenu ? parentMenu.querySelector('.sub-menu') : null;
+
+                if (parentMenu && subMenu && !target.closest('.sub-menu')) {
+                    event.preventDefault();
+
+                    document.querySelectorAll('.parent-menu').forEach(menu => {
+                        if (menu !== parentMenu) {
+                            menu.classList.remove('active');
+                            const otherSubMenu = menu.querySelector('.sub-menu');
+                            if (otherSubMenu) {
+                                otherSubMenu.classList.remove('active');
+                            }
+                        }
+                    });
+
+                    parentMenu.classList.toggle('active');
+                    subMenu.classList.toggle('active');
+                    
+                    contractBtn.style.display = 'none';
+                    formCatalogBtn.style.display = 'none'; // Ẩn nút mới khi đóng/mở menu cha
+                    contentFrame.src = 'about:blank';
+                    contentTitle.textContent = 'QUẢN LÝ VĂN PHÒNG HN11';
+                    waitingScreen.style.display = 'flex';
+                    return;
+                }
+
+                if (target.getAttribute('href') && target.getAttribute('href') !== '#') {
+                    waitingScreen.style.display = 'none';
+                    
+                    document.querySelectorAll('.sub-menu a').forEach(a => {
+                        a.classList.remove('active');
+                    });
+                    
+                    target.classList.add('active');
+
+                    const url = target.getAttribute('href');
+                    const isDriveUrl = url.includes('drive.google.com');
+                    const titleText = target.textContent.trim();
+
+                    // Logic hiển thị nút Danh mục biểu mẫu
+                    const isSoftwareRequest = titleText === 'Yêu cầu chỉnh sửa phần mềm';
+
+                    if (isSoftwareRequest) {
+                        formCatalogBtn.style.display = 'inline-flex';
+                    } else {
+                        formCatalogBtn.style.display = 'none';
+                    }
+
+                    let contractUrl = null;
+                    switch (titleText) {
+                        case 'Nguyễn Văn Ánh':
+                            contractUrl = 'https://drive.google.com/drive/u/0/folders/1z4Wfq66H07PdhXSr3-_m-wmQUw3ZneSG';
+                            break;
+                        case 'Nguyễn Văn Hiển':
+                            contractUrl = 'https://drive.google.com/drive/u/0/folders/1kgAP2rqyXndE1qM3anJkB7IvPoKTxEdp';
+                            break;
+                        case 'Nguyễn Văn Quỳnh':
+                            contractUrl = 'https://drive.google.com/drive/u/0/folders/1g28aX1kisBmOslb0nMCiNZ1Y6edjvJTn';
+                            break;
+                        case 'Trần Ngọc Biên':
+                            contractUrl = 'https://drive.google.com/drive/u/0/folders/13f0Lr_47g19lx1q64-ilCNh8xMlwp_Vy';
+                            break;
+                        case 'Nguyễn Đoàn Quang Lực':
+                            contractUrl = 'https://drive.google.com/drive/u/0/folders/1nTDhIjyMtmbHbYJqcD26YetUEon9Hq0u';
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (contractUrl) {
+                        contractBtn.style.display = 'inline-flex';
+                        contractBtn.href = contractUrl;
+                    } else {
+                        contractBtn.style.display = 'none';
+                    }
+                    
+                    let newUrl = isDriveUrl ? url.replace('/view', '/edit') : url.split('#')[0];
+                    openBtn.href = newUrl;
+                    openBtn.style.display = 'inline-flex';
+                    
+                    contentFrame.src = url;
+
+                    if (isDriveUrl) {
+                        openBtn.innerHTML = driveButtonHtml;
+                    } else {
+                        openBtn.innerHTML = sheetsButtonHtml;
+                    }
+
+                    contentTitle.textContent = titleText.toUpperCase();
+
+                    if (window.innerWidth < 768) {
+                        sidebar.classList.remove('active');
+                    }
+                } else {
+                    openBtn.style.display = 'none';
+                    contractBtn.style.display = 'none';
+                    formCatalogBtn.style.display = 'none'; // Ẩn nút mới khi không có link
+                    contentFrame.src = 'about:blank';
+                    contentTitle.textContent = 'QUẢN LÝ VĂN PHÒNG HN11';
+                    waitingScreen.style.display = 'flex';
+                }
+            });
+            
+            const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+
+            collapsibleHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const isVisible = content.classList.contains('active');
+                    const scrollHeight = content.scrollHeight;
+
+                    collapsibleHeaders.forEach(h => {
+                        const c = h.nextElementSibling;
+                        if (c !== content && c.classList.contains('active')) {
+                            c.classList.remove('active');
+                            c.style.maxHeight = '0';
+                        }
+                    });
+                    
+                    if (isVisible) {
+                        content.style.maxHeight = '0';
+                        content.classList.remove('active');
+                    } else {
+                        content.style.maxHeight = scrollHeight + "px";
+                        content.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        window.hideAuthModal = function() {
+            document.getElementById('auth-modal').style.display = 'none';
+        };
+    </script>
+</body>
+</html>
